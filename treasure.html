@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>"Игра "Найди клад!""</title>
+</head>
+<body>
+<h1 id="heading"></h1>
+<img id = "map" width=400 height=400 src="https://www.samiam.org/homm3/Caulixtla-HOMM3.png">
+<!--<img id = "map" width=400 height=400 src="http://localhost:63342/book/images/map_heroes.png">-->
+<!-- еще картинку можно было вставить так: <img id="map" width=400 height=400
+     src="/book/images/map_heroes.png">-->
+<p id="distance"></p>
+<script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+<script>
+    let getRandomNumber = function (size) {
+        return Math.floor(Math.random() * size)
+    }
+
+    let getDistance = function (event, target) {
+        let diffX = event.offsetX - target.x;
+        let diffY = event.offsetY - target.y;
+        return Math.sqrt((diffX * diffX) + (diffY * diffY));
+    };
+
+    let getDistanceHint = function (distance) {
+        if (distance < 10) {
+            return "Очень горячо!!!";
+        } else if (distance < 20) {
+            return "Горячо!";
+        } else if (distance < 40) {
+            return "Тепло!";
+        } else if (distance < 80) {
+            return "Немного тепло.";
+        } else if (distance < 160) {
+            return "Скорее холодно.";
+        } else if (distance < 320) {
+            return "Холодно!";
+        } else {
+            return "Очень холодно!";
+        }
+    }
+
+    let width = 400;
+    let height = 400;
+    let clicks = 0;
+
+    let target = {
+        x: getRandomNumber(width),
+        y: getRandomNumber(height)
+    };
+
+
+    $("#map").click(function (event) {
+        clicks++;
+        let distance = getDistance(event, target);
+        let distanceHint = getDistanceHint(distance);
+        let clicksLeft = (25 - clicks)
+        $("#distance").text(distanceHint + " Осталось попыток: " + clicksLeft);
+        if (distance < 8) {
+            alert("Клад найден! Потребовалось попыток:" + clicks)
+        }
+        if (clicks>25) {
+            alert("К сожалению, пока вы бродили вокруг да около, клад нашел кто-то другой. Попробуйте сыграть еще раз, обновив страницу!")
+         }
+    });
+</script>
+</body>
+</html>
