@@ -55,12 +55,12 @@
         clicks++;
         let distance = getDistance(event, target);
         let distanceHint = getDistanceHint(distance);
-        let clicksLeft = (25 - clicks)
+        let clicksLeft = (15 - clicks)
         $("#distance").text(distanceHint + " Осталось попыток: " + clicksLeft);
         if (distance < 8) {
             alert("Клад найден! Потребовалось попыток:" + clicks)
         }
-        if (clicks>25) {
+        if (clicks=15) {
             alert("К сожалению, пока вы бродили вокруг да около, клад нашел кто-то другой. Попробуйте сыграть еще раз, обновив страницу!")
          }
     });
