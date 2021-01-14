@@ -82,39 +82,38 @@
         <br>
         <pre><code class="js" style="overflow: auto;
             width: 500px;">function f1(string) {
-            for (let i = 0; i < string.length; i++) {
-                let eq = false;
-                for (let j = 0; j < string.length; j++) {
-                    if (j != i && string[i] === string[j]) {
-                        eq = true;
-                        break;
-                        }
-                }
-                if (!eq) {
-                    return string[i];
-                    }
-                }
+    for (let i = 0; i < string.length; i++) {
+        let eq = false;
+        for (let j = 0; j < string.length; j++) {
+            if (j != i && string[i] === string[j]) {
+                eq = true;
+                break;
             }
-            </code></pre>
+        }
+        if (!eq) {
+            return string[i];
+        }
+    }
+}</code></pre>
+
 
         <pre><code class="js" style="overflow: auto;
             width: 500px;">function f2(string) {
-        let dictF2 = {};
-        for (let i = 0; i < string.length; i++) {
-            if (dictF2[string[i]] === undefined) {
-                dictF2[string[i]] = 1
-            } else {
-                dictF2[string[i]]++
-            }
-        }
-        for (let n = 0; n < string.length; n++) {
-            if (dictF2[string[n]] === 1) {
-                return string[n];
-            }
+    let dictF2 = {};
+    for (let i = 0; i < string.length; i++) {
+        if (dictF2[string[i]] === undefined) {
+            dictF2[string[i]] = 1
+        } else {
+            dictF2[string[i]]++
         }
     }
+    for (let n = 0; n < string.length; n++) {
+        if (dictF2[string[n]] === 1) {
+            return string[n];
+        }
+    }
+}</code></pre>
 
-</code></pre>
     </div>
 
     <div class="box-2" style="width: 500px">
@@ -255,14 +254,16 @@
         return measures[Math.floor(nMeasures / 2)];
     }
 
-    function bench(f, strs) {
-        let res = [];
+    function bench(f, strs, data, update) {
+        const nMeasures = 11;
         for (let s of strs) {
-            res.push(time(function () {
-                f(s);
-            }, 11))
+            setTimeout(() => {
+                data.push(time(function () {
+                    f(s);
+                }, nMeasures));
+                update()
+            });
         }
-        return res;
     }
 
     let data = {
@@ -272,7 +273,6 @@
             []
         ]
     }
-
 
     let chart;
     $(() => {
@@ -298,12 +298,14 @@
         let userStep = userSymbNum / 10
         let ourStrings = generateStrings(userSymbNum, userStep);
 
-        data["series"][0] = bench(f1, ourStrings);
-        data["series"][1] = bench(f2, ourStrings);
-        chart.update()
+        data["series"][0] = [];
+        data["series"][1] = [];
+        bench(f1, ourStrings, data["series"][0], () => chart.update());
+        bench(f2, ourStrings, data["series"][1], () => chart.update());
 
         document.getElementById("btnOK").disabled = false
     }
+
 </script>
 
 
